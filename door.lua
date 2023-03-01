@@ -11,7 +11,7 @@ local ser = require("serialization")
 local term = require("term")
 local computer = component.computer
 
-local door = component.os_door
+local door = component.os_doorcontroller
 local magReader = component.os_magreader
 
 local modem = component.modem 
