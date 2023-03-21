@@ -1,0 +1,25 @@
+{
+  unknown = "No name",
+  edit = "Edit",
+  noComponents = "No connected redstone components",
+  help = "A useful tool for controlling all the redstone components connected to the computer",
+
+  -- Menu
+  about = "About",
+  toggles = "Toggles",
+  cleanup = "Clean Up",
+
+  -- Edit Area
+  name = "Name",
+  strength = "Strength: ",
+  side = "Side",
+  invert = "Invert: ",
+
+  -- Side Selector
+  top = "Top",
+  bottom = "Bottom",
+  north = "North",
+  south = "South",
+  west = "West",
+  east = "East",
+}
