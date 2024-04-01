@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Start Page</title>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Align items vertically */
+  animation: changeGradient 40s infinite linear; /* Add animation */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  display: flex; /* Use flexbox */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #333333;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none; /* Remove default link underline */
+  font-size: 16px; /* Adjust font size for mobile */
+  width: 200px; /* Set fixed width */
+  height: 50px; /* Set fixed height */
+  line-height: 30px; /* Center text vertically */
+  margin-bottom: 10px; /* Add margin between buttons */
+}
+
+.button img {
+  width: 32px; /* Adjust icon size for mobile */
+  height: 32px;
+  margin-right: 10px; /* Adjust spacing between icon and text */
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+}
+
+#customLinkInput {
+  margin-top: 20px;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: #ffffff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add shadow */
+  position: relative; /* Ensure positioning relative to this element */
+}
+
+.popup-content input {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.popup-content button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 200px; /* Set fixed width */
+  height: 50px; /* Set fixed height */
+  line-height: 30px; /* Center text vertically */
+}
+
+.popup-content button:hover {
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+}
+
+.popup-close {
+  position: absolute; /* Change position to absolute */
+  top: -20px; /* Adjusted position */
+  right: -20px; /* Adjusted position */
+  cursor: pointer;
+  font-size: 24px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #ff416c;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+
+.popup-close:hover {
+  color: red;
+}
+  
+#addCustomLinkButton {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #ffffff;
+  color: #333333;
+  border-radius: 50%; /* Rounded corners */
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+
+/* Hide unused buttons */
+.container .button:nth-child(n+10) {
+  display: none;
+}
+</style>
+</head>
+<body>
+<h1>MBrowser start page</h1>
+<div class="container" id="buttonsContainer">
+  <a href="https://www.google.com" target="_blank" class="button"><img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo">Google</a>
+  <a href="https://www.bing.com" target="_blank" class="button"><img src="https://img.icons8.com/color/48/000000/bing.png" alt="Bing Logo">Bing</a>
+  <a href="https://duckduckgo.com/" target="_blank" class="button"><img src="https://duckduckgo.com/favicon.ico" alt="duckduckgo Logo">DuckDuckGo</a>
+</div>
+
+<button id="addCustomLinkButton" onclick="showPopup()">+</button>
+
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <span class="popup-close" onclick="closePopup()">&times;</span>
+    <div class="error-message" id="errorMessage"></div> <!-- Error message container -->
+    <input type="text" id="nameInput" placeholder="Button Text"><br>
+    <input type="text" id="linkInput" placeholder="Enter URL"><br>
+    <input type="text" id="iconInput" placeholder="Enter Icon URL"><br>
+    <button onclick="addCustomLink()">Add Custom Link</button>
+  </div>
+</div>
+
+<script>
+function showPopup() {
+  document.getElementById('popup').style.display = 'flex';
+}
+
+function closePopup() {
+  document.getElementById('popup').style.display = 'none';
+}
+
+function addCustomLink() {
+  const nameInput = document.getElementById('nameInput').value;
+  const linkInput = document.getElementById('linkInput').value;
+  const iconInput = document.getElementById('iconInput').value;
+  
+  // Validate inputs
+  if (!nameInput || !linkInput) {
+    document.getElementById('errorMessage').innerText = 'Please enter both Button Text and URL';
+    return;
+  }
+  
+  // Check if URL starts with http://, https://, or chrome://
+  const validProtocols = ['http://', 'https://', 'chrome://'];
+  let isValidURL = false;
+  for (const protocol of validProtocols) {
+    if (linkInput.startsWith(protocol)) {
+      isValidURL = true;
+      break;
+    }
+  }
+  
+  if (!isValidURL) {
+    document.getElementById('errorMessage').innerText = 'URL must start with http:// or https://';
+    return;
+  }
+  
+  // Clear any previous error message
+  document.getElementById('errorMessage').innerText = '';
+  
+  // Create new link element
+  const newLink = document.createElement('a');
+  newLink.href = linkInput;
+  newLink.target = '_blank';
+  newLink.className = 'button';
+  
+  // Create span element for text
+  const spanText = document.createElement('span');
+  spanText.innerText = nameInput;
+  
+  // Create img element for icon
+  if (iconInput) {
+    const imgIcon = document.createElement('img');
+    imgIcon.src = iconInput;
+    imgIcon.alt = 'Custom Icon';
+    imgIcon.width = 32;
+    imgIcon.height = 32;
+    imgIcon.style.marginRight = '10px'; // Adjust spacing between icon and text
+    newLink.appendChild(imgIcon);
+  }
+  
+  // Append text to link
+  newLink.appendChild(spanText);
+  
+  // Append link to container
+  document.getElementById('buttonsContainer').appendChild(newLink);
+  
+  // Save link and icon to cookies
+  document.cookie = `customLink=${encodeURIComponent(linkInput)};`;
+  if (iconInput) {
+    document.cookie = `customIcon=${encodeURIComponent(iconInput)};`;
+  }
+  
+  // Close the popup after adding the link
+  closePopup();
+}
+</script>
+
+</body>
+</html>
